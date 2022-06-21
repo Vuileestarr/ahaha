@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+	  <html>
+	 
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+   <title>replit</title>
+   <link href="style.css" rel="stylesheet" type="text/css" />
+ </head>
+
+  <body>
+  Hello world
+   <p1>
+     Hello!
+   </p1>  
+    <script src="script.js"></script>
+  <p id = "p1">Width: <input type="number" id="field1" value="13" min = 10 max = 50000></p>
+   <p id = "p2">Height: <input type="number" id="field2" value="10" min = 10 max = 10></p>
+   <button id="myBtn" onclick="myFunction()">Confirm!</button>
+  <script>
+     //https://bobbyhadz.com/blog/javascript-cannot-set-property-of-undefined#:~:text=The%20%22Cannot%20set%20property%20of,setting%20the%20property%20on%20it.
+     function myFunction(){
+       var height = document.getElementById("field1").value;
+   height = parseInt(height);
+   var width = document.getElementById("field2").value;
+   width = parseInt(width);
+      var mazey = new Array(height);
+     for (var i = 0; i < width; i++)
+      {
+     //   mazey.push(new Array()); 
+        //mazey[mazey.length].unshift("00");
+       mazey[i] = new Array(width);
+      }
+     for (var i = 0; i < height; i++)
+      {
+       for (var j = 0; j < width; j++)
+           {
+            mazey[i][j] = "⬛";
+          }
+      }
+     mazey[1][0] = "⬜";
+  Snake(height, width);
+     }
+   
+   
+ //set up a way an array can be made of a variable size without undefined insides
+   function Snake(he, we)
+  {
+   document.write("<br>");
+ 
+    var maze = new Array();
+  
+  
+ var h = 0;
+   
+    
+  //   createMaze(mazey, he, we);
+ for (var i = 0; i < he; i++)
+      {
+           document.write(mazey[i][j]);
+}
+         document.write("<br>");
+       }
+
+  createMaze(he, we);
+    console.log(mazey[4][6]);
+     
+   }
+
+   /* Methods that return true if a direction can be cleared
+    * Determined if the block 2 spots ahead in said direction is filled or not
+  */
+function checkUp(h, w)
+   {
+    var temp = h - 2;
+      var up = false;
+     if(temp < 0)
+     {
+       return false;
+     }
+   else if(mazey[temp][w].equals("⬛"))
+     {
+       up = true;
+    }
+     return up;
+     }
+ 
+   function checkRight( h, w)
+   {
+    var right = false;
+     if(w >= mazey[0].length - 2)
+     {
+       return false;
+     }
+    else if(mazey[h][w + 2].equals("⬛"))
+     {
+      right = true;
+}
+     return right;
+  }
+  function checkDown(h, w)
+   {
+    var down = false;
+    if(h >= mazey.length - 2)
+     {
+       return false;
+    }   
+     else if(mazey[h + 2][w].equals("⬛"))
+     {
+       down = true;
+    }
+      return down;
+   }
+   function checkLeft( h, w)
+   {
+    var left = false;
+    if(w <= 1)
+     {
+       return false;
+     }
+     else if(mazey[h][w - 2].equals("⬛"))
+     {
+      left = true;
+     }
+    return left;
+    }
+  
+   
+   // guts out the maze
+   function createMaze( h, w)
+   {
+     // runs the while loop
+     var i = 0;
+     // repeats this method if there are more clear paths
+     var r = false;
+     
+    var n = 0; // amount of available positions that can be cleared
+     
+     // changeable variables
+     var h1 = h;
+     var w1 = w;
+     
+    // position vairables
+   var up = 0;
+     var right = 0;
+    var down = 0;
+     var left = 0;
+
+     /* checks if specific positions are clear
+      * if so, assigns the value of n to the position variable
+     * increases possible position count by 1
+     */
+      
+     if(checkUp( h, w))
+     {
+    n++;
+      up = n;
+     }
+     if(checkRight(h, w))
+     {
+n++;
+      right = n;
+    }
+     if(checkDown (h, w))
+     {
+       n++;
+       down = n;
+     }
+    if(checkLeft(h, w))
+     {
+      n++;
+       left = n;
+    }
+
+     // if no positions available, while loop ends
+    if(n == 0)
+    {
+      return -1; 
+   }
+     else // will create a 2nd path from same location if true
+    {
+     r = true;
+     }
+
+     while(i == 0)
+     {
+       // generates a random number between 1 to n + 1
+      var num = (int) (Math.random() * n) + 1;
+       
+       // clears 2 blocks in the available directions selected at random 
+if(up == num)
+       {
+         for(var y = h - 1; y > h - 3; y--)
+        {
+           mazey[y][w] = "⬜";
+           h1 = y;
+        }
+      }
+      if(right == num)
+      {
+        for (var x = w + 1; x < w + 3; x++)
+        {
+           mazey[h][x] = "⬜";
+          w1 = x;
+         }
+      }
+      if(down == num)
+     {
+       for (var y = h + 1; y < h + 3; y++)
+        {
+         mazey[y][w] = "⬜";
+          h1 = y;
+       }
+       }
+      if(left == num)
+       {
+         for (var x = w - 1; x > w - 3; x--)
+         {
+           mazey[h][x] = "⬜";
+          w1 = x;
+        }
+}
+
+       i  = createMaze(h1, w1); // continues the path until it reaches a dead end
+    }
+
+    // creates a second path from same position
+    if(r)
+    {
+       createMaze(mazey, h, w);
+    }
+    return -1;
+ }
+
+  function get(h, w)
+  {
+     return mazey[h][w];
+   }
+
+
+ //console.log(ok);
+     
+   </script>
+	  </body>
+
+</html>
